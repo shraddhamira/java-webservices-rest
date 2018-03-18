@@ -5,10 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.apache.log4j.Logger;
 
 import messanger.messanger.database.DatabaseClass;
 import messanger.messanger.model.Comment;
+import messanger.messanger.model.ErrorMessage;
 import messanger.messanger.model.Message;
 
 public class CommentService {
@@ -28,8 +33,14 @@ public class CommentService {
 	public Comment getComment(long messageId, long commentId) {
 		Map<Long, Comment> comments = null;
 		Message message = messages.get(messageId);
+		if(null == message){
+			ErrorMessage errorMessage = new ErrorMessage("Resource not found", 500, "Exception Occurred");
+			Response response = Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorMessage).build();
+			throw new WebApplicationException(response);
+		}
 		if (null == message.getComments()) {
 			comments = new HashMap<>();
+			
 			messages.get(messageId).setComments(comments);
 		}
 		return message.getComments().get(commentId);

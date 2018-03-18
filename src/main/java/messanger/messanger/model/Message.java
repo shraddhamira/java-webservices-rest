@@ -1,6 +1,8 @@
 package messanger.messanger.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,9 +27,10 @@ public class Message {
 	private String author;
 
 	private static Map<Long, Comment> comments = null;
+	private List<Link> links = new ArrayList<>();
 
 	public Message() {
-		
+
 	}
 
 	public Message(long id, String message, Date created, String author) {
@@ -87,9 +90,31 @@ public class Message {
 	}
 
 	/**
-	 * @param comments the comments to set
+	 * @param comments
+	 *            the comments to set
 	 */
 	public void setComments(Map<Long, Comment> comments) {
 		this.comments = comments;
+	}
+
+	/**
+	 * @return the links
+	 */
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	/**
+	 * @param links the links to set
+	 */
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
+	
+	public void addLink(String url, String rel){
+		Link link = new Link();
+		link.setLink(url);;
+		link.setRel(rel);
+		this.getLinks().add(link);
 	}
 }
