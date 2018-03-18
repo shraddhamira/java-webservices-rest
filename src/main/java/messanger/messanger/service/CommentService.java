@@ -16,12 +16,22 @@ public class CommentService {
 	private Map<Long, Message> messages = DatabaseClass.getMessages();
 
 	public List<Comment> getComments(long messageId) {
+		Map<Long, Comment> comments = null;
 		Message message = messages.get(messageId);
+		if (null == message.getComments()) {
+			comments = new HashMap<>();
+			messages.get(messageId).setComments(comments);
+		}
 		return new ArrayList<Comment>(message.getComments().values());
 	}
 
 	public Comment getComment(long messageId, long commentId) {
+		Map<Long, Comment> comments = null;
 		Message message = messages.get(messageId);
+		if (null == message.getComments()) {
+			comments = new HashMap<>();
+			messages.get(messageId).setComments(comments);
+		}
 		return message.getComments().get(commentId);
 	}
 
@@ -42,8 +52,13 @@ public class CommentService {
 	}
 
 	public Comment updateComment(long messageId, long commentId, Comment comment) {
+		Map<Long, Comment> comments = null;
 		Message message = messages.get(messageId);
 		comment.setId(commentId);
+		if (null == message.getComments()) {
+			comments = new HashMap<>();
+			messages.get(messageId).setComments(comments);
+		}
 		message.getComments().put(commentId, comment);
 		return comment;
 	}
